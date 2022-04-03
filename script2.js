@@ -5,8 +5,8 @@ grassEaterArr = []
 gishatichArr = []
 personArr = []
 
-let side = 10
-function generateMatrix(size, grassCount, grassEaterCount) {
+let side = 20
+function generateMatrix(size, grassCount, grassEaterCount,gishatichCount, personCount) {
    for (let y = 0; y < size; y++) {
       matrix[y] = []
       for (let x = 0; x < size; x++) {
@@ -18,7 +18,7 @@ function generateMatrix(size, grassCount, grassEaterCount) {
       let x = Math.round(Math.random() * (size - 1))
       let y = Math.round(Math.random() * (size - 1))
       if (matrix[y][x] == 0) {
-         new Grass(x, y)
+         matrix[y][x] = 1
       }
       else {
          i--
@@ -28,14 +28,35 @@ function generateMatrix(size, grassCount, grassEaterCount) {
       let x = Math.round(Math.random() * (size - 1))
       let y = Math.round(Math.random() * (size - 1))
       if (matrix[y][x] == 0) {
-         new GrassEater(x, y)
+         matrix[y][x] = 2
       }
       else {
          i--
 
       }
    }
-
+   for (let i = 0; i < gishatichCount; i++) {
+      let x = Math.round(Math.random() * (size - 1))
+      let y = Math.round(Math.random() * (size - 1))
+      if (matrix[y][x] == 0) {
+       matrix[y][x] = 3
+      }
+      else {
+         i--
+   
+      }
+   }
+   for (let i = 0; i < personCount; i++) {
+      let x = Math.round(Math.random() * (size - 1))
+      let y = Math.round(Math.random() * (size - 1))
+      if (matrix[y][x] == 0) {
+       matrix[y][x] = 4
+      }
+      else {
+         i--
+   
+      }
+   }
 
 }
 generateMatrix(50, 10, 4)
@@ -66,14 +87,11 @@ function setup() {
    new Person(2, 1)
    new Person(3, 2)
    new Person(4, 3)
-  
+
    frameRate(15)
 
 }
 function draw() {
-
-
-
    fill('white')
    for (let y = 0; y < matrix.length; y++) {
       for (let x = 0; x < matrix.length; x++) {
@@ -93,11 +111,11 @@ function draw() {
             fill("black")
          }
 
-         rect(x * 10, y * 10, 10, 10)
+         rect(x * 20, y * 20, 20, 20)
 
       }
    }
-
+   socket.io('send matrix', nkarel)
    for (let i in grassArr) {
       grassArr[i].mul()
    }
@@ -111,6 +129,23 @@ function draw() {
       personArr[i].start()
    }
 }
+
+function kill() {
+   socket.emit("kill")
+}
+function addGrass() {
+   socket.emit("add grass")
+}
+function addGrassEater() {
+   socket.emit("add grassEater")
+}
+function addGishatich(){
+   socket.emit("add gishatich")
+}
+function addPerson(){
+   socket.emit("add person")
+}
+
 
 // function setup(){
 //     createCanvas(500,500);
